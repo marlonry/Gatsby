@@ -1,0 +1,31 @@
+.blog-post {
+
+    background: orangered;
+    transition: all .3s;
+
+    &:not(:last-child) {
+        margin-bottom: 3rem;
+    }
+    &:first-child {
+        margin-top: 2rem;
+    }
+
+    & a {
+        text-decoration: none;  
+        display: block;
+        transition: all .3s;
+        padding: 2rem 3rem;
+        color: white;
+    }
+
+    &:hover {
+        background: rgb(236, 236, 236);
+        a {
+            color: black;
+        }
+    }
+}
+
+.blog-posts-container {
+    list-style-type: none;
+}
