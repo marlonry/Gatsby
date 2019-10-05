@@ -2,34 +2,51 @@ import React from 'react'
 import Layout from '../components/layout'
 import { graphql, useStaticQuery, Link } from 'gatsby'
 import blogStyles from './blog.module.scss';
+import Head from '../components/head'
 
 
 const BlogPage = () => {
     const data = useStaticQuery(graphql`
         query {
-            allMarkdownRemark {
+            allContentfulBlogPost (
+                sort: {
+                    fields: publishedDate,
+                    order: DESC
+                }
+            ) {
                 edges {
                     node {
-                        frontmatter {
-                            title
-                            date
-                        }
-                        fields {
-                            slug 
-                        }
+                        title
+                        slug
+                        publishedDate (formatString: "MMMM Do, YYYY")
                     }
                 }
             }
         }
+        # query {
+        #     allMarkdownRemark {
+        #         edges {
+        #             node {
+        #                 frontmatter {
+        #                     title
+        #                     date
+        #                 }
+        #                 fields {
+        #                     slug 
+        #                 }
+        #             }
+        #         }
+        #     }
+        # }
     `)
 
     const html = ((data) => {
-        return data.allMarkdownRemark.edges.map((post, index) => {
+        return data.allContentfulBlogPost.edges.map((post, index) => {
             return (
                 <li key={index} className={blogStyles.blogPost}>
-                    <Link to={`/blog/${post.node.fields.slug}`}>
-                        <h2>{post.node.frontmatter.title}</h2>
-                        <p>{post.node.frontmatter.date}</p>
+                    <Link to={`/blog/${post.node.slug}`}>
+                        <h2>{post.node.title}</h2>
+                        <p>{post.node.publishedDate}</p>
                     </Link>
                 </li>
             )
@@ -38,6 +55,7 @@ const BlogPage = () => {
 
     return (
         <Layout>
+            <Head mainTitle="Blog"/>
             <h1>Blog</h1>
             <ul className={blogStyles.blogPostsContainer}>
                 {html}
